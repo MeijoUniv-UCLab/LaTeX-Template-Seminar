@@ -1,0 +1,222 @@
+%--------------------------------------------------------------
+% 鈴木研究室　ゼミ報告書テンプレート（version 1.5）
+% 　更新日：2019/04/23
+%--------------------------------------------------------------
+
+\usepackage[utf8]{inputenc}         % 欧文文字をUTF-8で入力
+\usepackage{geometry}				% 余白の設定用
+\usepackage{fancyhdr}				% ヘッダ・フッタ調整用
+\usepackage{lastpage}
+\usepackage{calc,fancybox}			% 枠付きverbatim環境用
+\usepackage{boites}					% 複数行，複数ページにわたる枠の描画に利用
+\usepackage{multicol}				% 段組の利用
+\usepackage{url}					% URLやファイルパスなどの標記に利用
+\usepackage{extarrows}				% 矢印記号の出力に利用
+\usepackage{enumerate}				% enumerateの拡張版
+\usepackage{amsmath,amssymb,ascmac}	% 使える数式を増やす
+\usepackage[dvipdfmx]{graphicx}		% 図表の挿入
+%\usepackage{mediabb}				% PDF図の挿入
+\usepackage{float}					% 図表の位置指定
+\usepackage{cite}					% 文献引用の形式を変える
+\usepackage{color}					% カラー出力
+
+\usepackage{times}					% Times系フォント
+\usepackage{threeparttable}			% 表の下に脚注を追加
+\usepackage{multirow}				% 表における複数行にまたがる列の追加
+
+\usepackage{listings,jlisting}	    % ソースコードの埋込
+\lstset{%
+	language={C},
+	basicstyle={\small},%
+	identifierstyle={\small},%
+	commentstyle={\small\itshape\color{DarkGreen}},%
+	keywordstyle={\small\bfseries},%
+	ndkeywordstyle={\small},%
+	stringstyle={\small\ttfamily},
+	frame={tb},
+	breaklines=true,
+	columns=[l]{fullflexible},%
+	numbers=left,%
+	xrightmargin=0zw,%
+	xleftmargin=3zw,%
+	numberstyle={\scriptsize},%
+	stepnumber=1,
+	numbersep=1zw,%
+	lineskip=-0.5ex,%
+	keepspaces=true
+}
+
+%--------------------------------------------------------------
+% ページレイアウト
+%--------------------------------------------------------------
+% 余白
+\geometry{top=3.0cm,bottom=3.0cm,left=2.5cm,right=2.5cm}
+% ページの盤面を揃える
+\flushbottom
+
+%--------------------------------------------------------------
+% ヘッダ・フッタレイアウト
+%--------------------------------------------------------------
+% 年度
+\def\year#1{\def\@year{#1}}
+% メンバーID
+\def\MemberID#1{\def\@MemberID{#1}}
+% ドキュメントNo
+\def\DocumentNo#1{\def\@DocumentNo{#1}}
+% 報告会名称
+\def\MeetingName#1{\def\@MeetingName{#1}}
+
+% ヘッダ・フッタの設定
+\def\makeheader{
+	\pagestyle{fancy}
+	\addtolength{\headheight}{2zh}
+	\lhead{\@year 年度　\@MeetingName\\ Document No.\@MemberID -\@DocumentNo}
+	\rhead{\@date \\ 鈴木研究室\hspace{2zw} \@author}
+	\cfoot{\thepage{}/{}\pageref{LastPage}}
+	\renewcommand{\headrulewidth}{0pt}
+	\renewcommand{\footrulewidth}{0pt}
+}
+
+%--------------------------------------------------------------
+% アブストラクト
+%--------------------------------------------------------------
+% \begin{abstract}縲彌end{abstract}で表示される「概要」見出しの再定義
+\renewcommand{\abstractname}{Abstract}
+
+
+%--------------------------------------------------------------
+% 文字サイズ
+%--------------------------------------------------------------
+% \sectionの文字サイズを調整（以下，\@startsectionの引数）
+% ・1番目：カウンタ名
+% ・2番目：インデントレベル＝1
+% ・3番目：左マージンからのインデント量＝0pt
+% ・4番目：前段落からのスキップ量＝1zh
+% ・5番目：後ろに続く段落とのスキップ量＝0pt
+% ・6番目：文字スタイル（通常サイズ，太文字）
+\renewcommand{\section}{%
+	\@startsection{section}{1}{0pt}{1zh}{0pt}{\large\bf}%
+}
+% \subsectionの文字サイズを調整（\sectionと同様，ただし前段落からのスキップ量は0とする）
+\renewcommand{\subsection}{%
+	\@startsection{subsection}{2}{0pt}{0zh}{0pt}{\normalsize\bf}%
+}
+% \subsubsectionの文字サイズを調整（\subsectionと同様）
+\renewcommand{\subsubsection}{%
+	\@startsection{subsubsection}{3}{0pt}{0zh}{0pt}{\normalsize\bf}%
+}
+
+% 見出しの番号は\subsectionまでとする
+\setcounter{secnumdepth}{2}
+
+
+%--------------------------------------------------------------
+% 枠
+%--------------------------------------------------------------
+% 枠付きverbatimの定義
+\newenvironment{fverbatim}[1]%
+{\VerbatimEnvironment
+\begin{Sbox} \begin{minipage}{#1}%
+\begin{Verbatim}}{\end{Verbatim}%
+\end{minipage}\end{Sbox}%
+\fbox{\TheSbox}}
+
+
+%--------------------------------------------------------------
+% 箇条書きの行間調整（itemize，enumerate，description用）
+%--------------------------------------------------------------
+
+\def\@listI{
+ \leftmargin=\leftmargini
+ \parsep=\z@
+ \topsep=2truept plus 2truept minus 1truept
+ \itemsep=0truept plus 2truept\relax}
+\let \@listi=\@listI
+\@listi
+
+\def\@listii{
+ \leftmargin=\leftmarginii
+ \labelwidth=\leftmarginii
+ \advance \labelwidth by -\labelsep
+ \topsep=0truept plus 1truept minus 0truept
+ \parsep=\z@
+ \itemsep=0truept plus 1truept\relax}
+
+\def\@listiii{
+ \leftmargin=\leftmarginiii
+ \labelwidth=\leftmarginiii
+ \advance \labelwidth by -\labelsep
+ \topsep=0truept plus 1truept minus 0truept
+ \parsep=\z@}
+
+
+%--------------------------------------------------------------
+% 図表のフォーマット
+%--------------------------------------------------------------
+\long\def\@makecaption#1#2{{\small
+	\advance\leftskip .0628\linewidth
+	\advance\rightskip .0628\linewidth
+	\vskip\abovecaptionskip
+	\sbox\@tempboxa{\bf{#1\hskip1zw\relax #2}}%
+	\ifdim \wd\@tempboxa <\hsize \centering \fi
+	\bf{#1\hskip1zw\relax #2}\par
+	\vskip\belowcaptionskip}}
+
+% 図表番号スタイル（セクション番号は表示しない）
+\renewcommand{\thefigure}{\arabic{figure}}
+\renewcommand{\thetable}{\arabic{table}}
+
+% 太い罫線
+\def\Hline{\noalign{\hrule height 0.4mm}}
+
+% 図表とキャプションの間隔
+\setlength{\abovecaptionskip}{5pt}
+\setlength{\belowcaptionskip}{5pt}
+
+% ページの上下に出力される図表と本文の間のスペース
+\setlength{\floatsep}{1zh}
+% ページの上下に出力される図表と図表の間のスペース
+\setlength{\textfloatsep}{1zh}
+% ページの途中に出力される図表と本文の間のスペース
+\setlength{\intextsep}{1zh}
+
+
+%--------------------------------------------------------------
+% 1ページ当たりに図表が占める割合
+%--------------------------------------------------------------
+% ページ上部を占める割合の上限
+\def\topfraction{1.0}
+% ページ下部を占める割合の上限
+\def\bottomfraction{1.0}
+% 図表がページを占める割合の上限
+\def\floatpagefraction{0.7}
+% ページ上部を占める図表の数の上限
+\setcounter{topnumber}{5}
+% ページ下部を占める図表の数の上限
+\setcounter{bottomnumber}{5}
+% ページを占める図表の数の上限
+\setcounter{totalnumber}{10}
+% ページうち本文が占める割合の下限
+\def\textfraction{0.1}
+
+
+%--------------------------------------------------------------
+% 図表，数式および章節の参照の定義
+%--------------------------------------------------------------
+\def\figref#1{\figurename\hskip1ex \ref{#1}}
+\def\tabref#1{\tablename\hskip1ex \ref{#1}}
+\def\eqref#1{式(\ref{#1})}
+\def\chapref#1{\ref{#1}章}
+\def\secref#1{\ref{#1}節}
+\def\subsecref#1{\ref{#1}項}
+\def\apdxref#1{付録\ref{#1}}
+
+
+%--------------------------------------------------------------
+% 特殊記号の定義
+%--------------------------------------------------------------
+% アンダースコア（_）を表示するマクロ
+\def\us{\symbol{"5F}}
+
+% ローマ数字
+\def\Rnum#1{\uppercase\expandafter{\romannumeral #1}}
